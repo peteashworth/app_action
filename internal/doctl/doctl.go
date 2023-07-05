@@ -144,6 +144,10 @@ func (d *Client) IsDeployed(appID string) error {
 			return errors.Wrap(err, "error in retrieving list of deployments")
 		}
 		if app[0].Phase == "ACTIVE" {
+			if app[0].CauseDetails.Type == "AUTO_ROLLBACK" {
+				fmt.Println("Build unsuccessful... rolledback")
+				return errors.Wrap(err, "build unsuccessful... rolled back")
+			}
 			fmt.Println("Build successful")
 			return nil
 		}
